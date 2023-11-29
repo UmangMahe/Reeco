@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
 export const orderSlice = createSlice({
     name: 'order',
     initialState: {
-        currentProduct: {}
+        currentProduct: {},
     },
 
     reducers :{
@@ -12,14 +13,13 @@ export const orderSlice = createSlice({
         },
         approve: (state, action)=>{
             let product = {...action.payload}
-            product['state'] = 'approved'
             state.currentProduct = product
         },
         missing: (state, action)=>{
-            let product = {...action.payload.currentProduct}
+            let product = {...action.payload.data}
             product['state'] = action.payload.e;
             state.currentProduct = product
-        }
+        },
     }
 })
 
