@@ -17,15 +17,28 @@ import {
   setProduct,
 } from "../../redux/features/order/orderSlice";
 import Utils from "../../utils";
+import axios from "axios";
 
 function OrderTable(props) {
+  const [listLoading, setListLoading] = useState(true);
+  useEffect(() => {
+    axios
+      .get(
+        "https://my-json-server.typicode.com/UmangMahe/reeco-mockend/products"
+      )
+      .then((res) => {
+        const { data } = res;
+        setListLoading(false);
+        setList(data);
+      });
+  }, []);
   const columns = [
     {
       title: "",
       dataIndex: "actions",
       render: (_, elm) => (
         <div className="product-image">
-          <Image src={elm.image} />
+          <Image src={`/images/${elm.image}`} />
         </div>
       ),
     },
@@ -120,74 +133,52 @@ function OrderTable(props) {
     },
   ];
 
-  const data = [
-    {
-      key: "1",
-      name: "Chicken Breast Fillets, Boneless matuumaMarinated 6 Ounce Raw, Invivid",
-      brand: "Hormel Black <br />Labelmany",
-      image: Avacado,
-      price: "$60.67",
-      qty: 0,
-      state: "urgent",
-      address: "New York No. 1 Lake Park",
-    },
-    {
-      key: "2",
-      name: "Chicken Breast Fillets, Boneless matuumaMarinated 6 Ounce Raw, Invivid",
-      brand: "Hormel Black <br />Labelmany",
-      image: Avacado,
-      price: "$60.67",
-      qty: 15,
-      total: 9000.88,
-      state: "missing",
-      address: "London No. 1 Lake Park",
-    },
-    {
-      key: "3",
-      name: "Chicken Breast Fillets, Boneless matuumaMarinated 6 Ounce Raw, Invivid",
-      brand: "Hormel Black <br />Labelmany",
-      image: Avacado,
-      price: "$60.67",
-      oldPrice: "$10.43",
-      qty: 15,
-      state: "approved",
-      total: 9000.88,
-      address: "Sydney No. 1 Lake Park",
-    },
-    {
-      key: "4",
-      name: "Chicken Breast Fillets, Boneless matuumaMarinated 6 Ounce Raw, Invivid",
-      brand: "Hormel Black <br />Labelmany",
-      image: Avacado,
-      price: "$60.67",
-      oldPrice: "$10.43",
-      qty: 15,
-      total: 12654.32,
-      oldTotal: 3345.12,
-      state: "approved",
-      address: "Sydney No. 1 Lake Park",
-    },
-  ];
-
-  const [list, setList] = useState(data);
+  const [list, setList] = useState(null);
 
   const product = useSelector((state) => state.order);
 
   useEffect(() => {
     const { currentProduct } = product;
-    Utils.updateTableWithId(list, currentProduct, setList, "key");
+    if (currentProduct && list)
+      Utils.updateTableWithId(list, currentProduct, setList, "id");
   }, [product]);
 
   const dispatch = useDispatch();
 
-  const handleApprove = (e) => {
-    dispatch(approve(e));
+  const handleApprove = async (e) => {
+    await axios(
+      `https://my-json-server.typicode.com/UmangMahe/reeco-mockend/products/${e.id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: JSON.stringify({ state: "approved" }),
+      }
+    ).then((res) => {
+      dispatch(approve(res.data));
+    });
   };
 
-  const handleMissing = (e) => {
+  const handleMissing = async (e) => {
     const { currentProduct } = product;
-    dispatch(missing({ e, currentProduct }));
-    setTimeout(()=>showModal(), 200);
+    await axios(
+      `https://my-json-server.typicode.com/UmangMahe/reeco-mockend/products/${currentProduct.id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: JSON.stringify({ state: e }),
+      }
+    )
+      .then((res) => {
+        const { data } = res;
+        dispatch(missing({ e, data }));
+      })
+      .finally(() => {
+        setTimeout(() => showModal(), 0);
+      });
   };
 
   const [modal, setModal] = useState(false);
@@ -237,9 +228,9 @@ function OrderTable(props) {
                 pagination={true}
                 columns={columns}
                 dataSource={list}
-                loading={false}
-                rowKey="key"
+                rowKey="id"
                 size="middle"
+                loading={listLoading}
               />
             </div>
           </Card.Body>
@@ -263,6 +254,7 @@ function OrderTable(props) {
             No
           </Button>,
           <Button
+            
             onClick={() => handleMissing("urgent")}
             className="reeco-button-link"
             key={"yes"}
