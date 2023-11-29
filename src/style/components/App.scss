@@ -1,0 +1,158 @@
+@import "../colors";
+@import "../card";
+
+.reeco-navbar {
+  background-color: $base-color;
+  color: $text-color-white;
+  height: 55px;
+
+  .nav-link {
+    color: rgba($text-color-white, $link-opacity);
+
+    &:focus,
+    &:hover {
+      color: $text-color-white;
+    }
+  }
+
+  .navbar-brand {
+    font-size: 1.42em;
+  }
+
+  .navbar-icon {
+    transform: scaleX(-1);
+    font-size: 1.4em;
+  }
+
+  .navbar-items {
+    margin-left: 24px;
+    column-gap: 50px;
+  }
+}
+
+.header {
+  display: block;
+  height: 85px;
+  box-shadow: $shadow-grey;
+  background-color: var(--bs-white);
+  padding: 8px 0;
+
+  .reeco-button {
+    font-size: 0.9em;
+  }
+}
+
+.reeco-breadcrumb {
+  font-size: 0.95em;
+  color: rgba($text-color-dark, 0.8);
+}
+
+.reeco-section {
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.order-details {
+  .reeco-card {
+    height: 120px;
+
+    .ant-divider {
+      height: 100%;
+      border-inline-start: 2px solid rgba(5, 5, 5, 0.06);
+    }
+
+    .card-title {
+      font-size: 1.25em;
+      line-height: 1.4;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .card-subtitle {
+      font-size: 0.95em;
+      color: var(--bs-secondary-color);
+      margin-bottom: 6px;
+    }
+  }
+}
+
+.order-table {
+  .product-image {
+    width: 52px;
+    padding: 8px;
+    padding-right: 0;
+    // margin-left: 8px;
+  }
+
+  .product-name {
+    padding-right: 16px;
+    word-break: break-all;
+  }
+  .product-price,
+  .product-total {
+    p {
+      color: $text-color-gray;
+      text-decoration: line-through;
+    }
+  }
+  .product-qty {
+    color: $text-color-gray;
+    strong {
+      color: $table-text-color;
+    }
+  }
+  .product-status {
+    background-color: $table-cell-bg;
+    padding-left: 18px !important;
+
+    .anticon {
+      &.checkicon {
+        color: $accent-color;
+      }
+      &.closeicon {
+        color: var(--bs-danger);
+      }
+    }
+
+    .ant-tag {
+      border-radius: 24px;
+      line-height: 30px;
+      padding-inline: 14px;
+    }
+
+    .reeco-link {
+      color: rgba($text-color-dark, 0.8);
+
+      &:hover {
+        color: $accent-color;
+      }
+    }
+  }
+
+
+}
+
+.reeco-confirm {
+
+  .ant-modal-header {
+    margin-bottom: 12px;
+    .ant-modal-title {
+      font-size: 1.2em;
+    }
+    
+  }
+  .ant-modal-content {
+    border-radius: 0%;
+    padding: 30px;
+  }
+  .ant-modal-close {
+    top: 30px;
+    inset-inline-end: 30px;
+  }
+  .ant-modal-footer {
+    margin-top: 28px;
+  }
+  .reeco-button-link {
+    font-weight: 700;
+  }
+}

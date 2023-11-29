@@ -1,0 +1,11 @@
+$border-radius: 12px;
+
+.reeco-card {
+    border-radius: $border-radius;
+
+    .card-body {
+        padding: 18px 40px;
+    }
+
+}
+
